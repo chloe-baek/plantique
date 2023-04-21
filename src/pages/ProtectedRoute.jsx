@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useUserContext } from '../components/context/UserContext';
+import { useUserContext } from '../context/UserContext';
 
 export default function ProtectedRoute({ children, requireAdmin }) {
   const { user } = useUserContext();

@@ -34,7 +34,7 @@ export default function NewProduct() {
       .finally(() => setIsUploading(false));
   };
   return (
-    <section className='w-full text-center'>
+    <section className='w-full text-center pb-12'>
       <h2 className='text-2xl font-bold my-4'>Registering a new product.</h2>
       {success && <p className='my-2'>✅ {success}</p>}
       {file && (
