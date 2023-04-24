@@ -8,7 +8,7 @@ export function UserContextProvider({ children }) {
 
   useEffect(() => {
     onUserStateChange((user) => {
-      console.log(user);
+      // console.log(user);
       setUser(user);
     });
   }, []);

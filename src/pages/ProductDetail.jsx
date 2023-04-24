@@ -1,23 +1,28 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Button from '../components/ui/Button';
-import { useUserContext } from '../context/UserContext';
-import { addOrUpdateToCart } from '../api/firebase';
+import useCart from '../hooks/useCart';
 
 export default function ProductDetail() {
-  const { uid } = useUserContext();
+  const { addOrUpdateItem } = useCart();
   const {
     state: {
       product: { id, image, title, description, category, price, options },
     },
   } = useLocation();
+  const [success, setSuccess] = useState();
   const [selected, setSelected] = useState(options && options[0]);
   const handleSelect = (e) => {
     setSelected(e.target.value);
   };
   const handleClick = (e) => {
     const product = { id, image, title, price, option: selected, quantity: 1 };
-    addOrUpdateToCart(uid, product);
+    addOrUpdateItem.mutate(product, {
+      onSuccess: () => {
+        setSuccess('The plant has been successfully added to the cart.🪴');
+        setTimeout(() => setSuccess(null), 4000);
+      },
+    });
   };
   return (
     <section className='flex flex-col md:flex-row justify-evenly p-4 mt-5'>
@@ -49,6 +54,7 @@ export default function ProductDetail() {
               ))}
           </select>
         </div>
+        {success && <p className='my-2 font-semibold text-lg'>{success}</p>}
         <Button text='Add' onClick={handleClick} />
       </div>
     </section>
