@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Button from '../components/ui/Button';
 import useCart from '../hooks/useCart';
+import { useUserContext } from '../context/UserContext';
 
 export default function ProductDetail() {
+  const { user } = useUserContext();
   const { addOrUpdateItem } = useCart();
   const {
     state: {
@@ -17,17 +19,20 @@ export default function ProductDetail() {
   };
   const handleClick = (e) => {
     const product = { id, image, title, price, option: selected, quantity: 1 };
-    addOrUpdateItem.mutate(product, {
-      onSuccess: () => {
-        setSuccess('The plant has been successfully added to the cart.🪴');
-        setTimeout(() => setSuccess(null), 4000);
-      },
-    });
+    addOrUpdateItem.mutate(
+      product,
+      user && {
+        onSuccess: () => {
+          setSuccess('The plant has been successfully added to the cart.🪴');
+          setTimeout(() => setSuccess(null), 3000);
+        },
+      }
+    );
   };
   return (
     <section className='flex flex-col md:flex-row justify-evenly p-4 mt-5'>
       <img
-        className='w-full max-w-[45%] px-4 basis-7/12 sm:slef-center'
+        className='w-full max-w-[45%] px-4 basis-7/12 sm:self-center'
         src={image}
         alt={title}
       />
@@ -55,7 +60,14 @@ export default function ProductDetail() {
           </select>
         </div>
         {success && <p className='my-2 font-semibold text-lg'>{success}</p>}
-        <Button text='Add' onClick={handleClick} />
+        <div className='flex justify-end'>
+          <Button text='Add to Cart' onClick={handleClick} />
+        </div>
+        {!user && (
+          <p className='text-sm text-right mt-2'>
+            &lowast;To add items to your cart, please log in to your account.
+          </p>
+        )}
       </div>
     </section>
   );

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import CartItem from '../components/CartItem';
 import { BsPlus } from 'react-icons/bs';
 import { CgMathEqual } from 'react-icons/cg';
@@ -8,7 +9,7 @@ import useCart from '../hooks/useCart';
 
 const SHIPPING = 3;
 export default function MyCart() {
-  // const { uid } = useUserContext();
+  const navigate = useNavigate();
   const {
     cartQuery: { isLoading, data: products },
   } = useCart();
@@ -22,6 +23,7 @@ export default function MyCart() {
       (prev, current) => prev + parseInt(current.price) * current.quantity,
       0
     );
+
   return (
     <section className='p-8 flex flex-col'>
       <p className='text-2xl text-center font-bold pb-4 border-b border-gray-400'>
@@ -40,14 +42,23 @@ export default function MyCart() {
                 <CartItem key={product.id} product={product} />
               ))}
           </ul>
-          <div className='flex justify-between items-center mb-6 px-2 md:px-8 lg:px-10'>
+          <div className='flex justify-center items-center mb-6 px-2 md:px-8 lg:px-10'>
             <PriceCard text='Total' price={totalPrice} />
             <BsPlus className='shrink-0' />
             <PriceCard text='Shipping' price={SHIPPING} />
             <CgMathEqual className='shrink-0' />
             <PriceCard text='Shipping' price={totalPrice + SHIPPING} />
           </div>
-          <Button text='Place an Order' />
+          <div className='flex justify-end gap-4'>
+            <Button
+              text='Continue Shopping'
+              onClick={() => navigate('/products')}
+            />
+            <Button
+              text='Place an Order'
+              onClick={() => navigate('/checkout')}
+            />
+          </div>
         </>
       )}
     </section>
