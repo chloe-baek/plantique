@@ -1,4 +1,4 @@
-# 🌱Plantique
+# Plantique🌱
 
 
 ### 📌 Features
